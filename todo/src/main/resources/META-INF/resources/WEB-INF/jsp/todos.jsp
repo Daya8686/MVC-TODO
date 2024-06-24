@@ -5,13 +5,17 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<link href="webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 <title>List Todos page</title>
+
 </head>
 <body>
-	<div>Welcome ${username}</div>
+<div class="container">
+	<h2>Welcome ${username}</h2>
 	<hr>
 	<div>
-		<table>
+	<a href="add-todo" class="btn btn-success">Add Todo</a>
+		<table class="table">
 			<thead>
 				<tr>
 					<th>Todo Id</th>
@@ -19,6 +23,8 @@
 					<th>Course Name</th>
 					<th>Target Date to complete</th>
 					<th>Completion ?</th>
+					<th></th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -29,11 +35,15 @@
 						<td>${todo.courseName}</td>
 						<td>${todo.targetDate}</td>
 						<td>${todo.isDone}</td>
+						<td><a href="update-todo" class="btn btn-primary">Update</a></td>
+						<td><a href="delete-todo" class="btn btn-danger">Delete</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
-
+	</div>
+<script src="webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script src="webjars/jquery/3.7.1/jquery.min.js" type="text/javascript"></script>
 </body>
 </html>

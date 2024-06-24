@@ -2,10 +2,13 @@ package com.todoapplication.entity;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Size;
+
 public class Todo {
 	
 	private int id;
 	private String authorName;
+	@Size(min = 10, message = "Course Name must not be less the 10 characters")
 	private String courseName;
 	private LocalDate targetDate;
 	private boolean isDone;
