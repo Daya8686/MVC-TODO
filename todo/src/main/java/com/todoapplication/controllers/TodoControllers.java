@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,6 +51,30 @@ public class TodoControllers {
 		todo.setAuthorName(username);
 		todoServices.addTodo(todo);
 		return "redirect:todos";
+	}
+	@RequestMapping(value="update-todo", method = RequestMethod.GET)
+	public String updateTodoPage(ModelMap modelMap,@RequestParam int id, Todo todo) {
+		todo=todoServices.findById(id);
+		modelMap.addAttribute("todo", todo);
+		return "addTodo";
+	}
+	@RequestMapping(value="update-todo", method = RequestMethod.POST)
+	public String updateTodo(@Valid Todo todo, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			List<ObjectError> allErrors = bindingResult.getAllErrors();
+			for(ObjectError e:allErrors) {
+				System.out.println(e);
+			}
+			return "addTodo";
+		}
+		todoServices.updateTodo(todo);
+		return "redirect:todos";
+	}
+	
+	@RequestMapping(value="delete-todo", method= RequestMethod.GET)
+	public String deleteTodo(@RequestParam int id) {
+		todoServices.deleteById(id);
+		return"redirect:todos";
 	}
 
 }

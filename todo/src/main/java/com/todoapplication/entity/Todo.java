@@ -2,6 +2,7 @@ package com.todoapplication.entity;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Size;
 
 public class Todo {
@@ -10,6 +11,7 @@ public class Todo {
 	private String authorName;
 	@Size(min = 10, message = "Course Name must not be less the 10 characters")
 	private String courseName;
+	@FutureOrPresent(message = "you can not select date in past!!")
 	private LocalDate targetDate;
 	private boolean isDone;
 		
