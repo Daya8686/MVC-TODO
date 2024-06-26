@@ -1,36 +1,34 @@
 package com.todoapplication.services;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.todoapplication.entity.Todo;
-
-import jakarta.validation.Valid;
+import com.todoapplication.repository.TodoRepository;
 
 @Service
 public class TodoServices {
 	
 	private static List<Todo> todoList =new ArrayList<>();
-	static int indexCounter=0;
 	
-	static {
-		todoList.add(new Todo(++indexCounter, "in28minutes", "Spring Boot", LocalDate.now().plusYears(1), false));
-		todoList.add(new Todo(++indexCounter, "telusuko", "Spring ", LocalDate.now().plusYears(2), false));
-		todoList.add(new Todo(++indexCounter, "selinumExpress", "Microservices", LocalDate.now().plusYears(1), false));
-		
-	}
+	@Autowired
+	private TodoRepository repository;
 	
 	public List<Todo> findByUsername(String username){
-		return todoList;
+		 todoList = repository.findByUsername(username);
+		List<Todo> forUser=todoList.stream().filter(todo->todo.getUsername().equals(username)).toList();
+		return forUser;
 	}
 
 	public void addTodo(Todo todo) {
-		todo.setId(++indexCounter);
-		todoList.add(todo);
+		System.out.println(todo);
+		
+		repository.save(todo);
+		
 	}
 
 	public Todo findById(int id) {
@@ -40,19 +38,20 @@ public class TodoServices {
 	}
 
 	public void updateTodo( Todo todo) {
-		Todo todoOrg=todoList.stream().filter(t->t.getId()==todo.getId()).findFirst().orElseThrow(()-> new IllegalArgumentException());
-		todoOrg.setAuthorName(todo.getAuthorName());
-		todoOrg.setCourseName(todo.getCourseName());
-		todoOrg.setTargetDate(todo.getTargetDate());
-		todoOrg.setIsDone(todo.getIsDone());
+		Todo updatedTodo = findById(todo.getId());
+		updatedTodo.setAuthorName(todo.getAuthorName());
+		updatedTodo.setCourseName(todo.getCourseName());
+		updatedTodo.setTargetDate(todo.getTargetDate());
+		updatedTodo.setIsDone(todo.getIsDone());
+		repository.save(updatedTodo);
 		
 		
 	}
 
 	public void deleteById(int id) {
-		Todo todo = todoList.stream().filter(t->t.getId()==id).findFirst().get();
-		todoList.remove(todo);
+		repository.deleteById(id);
 		
 	}
+	
 
 }
